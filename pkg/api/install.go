@@ -24,6 +24,7 @@ import (
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	corev1 "k8s.io/client-go/listers/core/v1"
 	"k8s.io/client-go/tools/cache"
+	"k8s.io/klog"
 	"k8s.io/metrics/pkg/apis/metrics"
 	"k8s.io/metrics/pkg/apis/metrics/install"
 	"k8s.io/metrics/pkg/apis/metrics/v1beta1"
@@ -58,5 +59,6 @@ func Install(m MetricsGetter, podMetadataLister cache.GenericLister, nodeLister 
 	node := newNodeMetrics(metrics.Resource("nodemetrics"), m, nodeLister, nodeSelector)
 	pod := newPodMetrics(metrics.Resource("podmetrics"), m, podMetadataLister)
 	info := Build(pod, node)
+	klog.Infof("INFO: %#v", info)
 	return server.InstallAPIGroup(&info)
 }
